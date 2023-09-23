@@ -13,8 +13,8 @@ function prepareScripts(){
     return src([
         'app/js/*.js', 
         '!app/js/main.min.js',
-        '!app/js/jquery.min.js',
-        '!app/js/slick.min.js'
+        //'!app/js/jquery.min.js',
+        //'!app/js/slick.min.js'
     ])
     .pipe(concat('main.min.js'))
     .pipe(uglify())
@@ -37,6 +37,7 @@ function prepareStylesWithCompress() {
     .pipe(browserSync.stream())
 }
 
+/*
 function prepareStylesCompressOnly() {
     return src('app/css/slick.css')
     .pipe(rename({extname: ".min.css"}))
@@ -44,7 +45,7 @@ function prepareStylesCompressOnly() {
     .pipe(dest('app/css'))
     .pipe(browserSync.stream())
 }
-
+*/
 
 
 function observe(){
@@ -54,7 +55,7 @@ function observe(){
         'app/js/*.js', 
         '!app/js/main.min.js',
         '!app/js/jquery.min.js',
-        '!app/js/slick.min.js'
+        //'!app/js/slick.min.js'
     ], prepareScripts)
     watch(['app/**/*.html']).on('change', browserSync.reload)
 }
@@ -82,14 +83,14 @@ function build(){
     .pipe(dest('dist'))
 }
 
-exports.styles = series(prepareStyles, prepareStylesWithCompress, prepareStylesCompressOnly);
+exports.styles = series(prepareStyles, prepareStylesWithCompress /*, prepareStylesCompressOnly*/);
 exports.scripts = prepareScripts;
 exports.observe = observe;
 exports.browser = browserRefresh;
 exports.clean = cleanDist;
 
 exports.build = series(cleanDist, build);
-exports.default = series(prepareStyles, prepareStylesWithCompress, prepareStylesCompressOnly, prepareScripts, parallel(observe, browserRefresh));
+exports.default = series(prepareStyles, prepareStylesWithCompress, /*prepareStylesCompressOnly,*/ prepareScripts, parallel(observe, browserRefresh));
 
 
 
